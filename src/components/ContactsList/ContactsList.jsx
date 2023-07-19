@@ -28,13 +28,13 @@ const ContactsList = () => {
   return (
     <ul className={style.contacts__list}>
       {contactsList.length > 0 ? (
-        filterList().map(({ id, name, number }) => {
+        filterList().map(({ id, name, phone}) => {
           return (
             <ContactItem
             key={id}
             id={id}
             name={name}
-            number={number}
+            number={phone}
             onClick={handleDeleteContact}
           />
         );
