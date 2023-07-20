@@ -1,20 +1,19 @@
 
 import React,{ useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact } from 'redux/contactsAPI';
+import { getContacts } from 'redux/selectors';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
 import style from 'components/ContactForm/contactForm.module.css'
-import {
-  useGetContactsQuery,
-  useCreateContactMutation,
-} from 'redux/contactsAPI';
 
 export default function ContactForm(){
 
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
  
-  const { data: contacts } = useGetContactsQuery();
-  const [createContact] = useCreateContactMutation();
+  const { contacts } = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleNameChange = e => {
     setName(e.currentTarget.value);
@@ -32,8 +31,8 @@ export default function ContactForm(){
     };
   contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase())
   ? alert(`${name} is already in contacts`)
-  : createContact(newContact);
-reset();
+  : dispatch(addContact({ name, number }));
+  reset();
 };
 const reset = () => {
   setName('');

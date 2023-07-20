@@ -1,41 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import ContactItem from 'components/ContactItem/ContactItem';
 import style from 'components/ContactsList/ContactsList.module.css'
 import { useSelector } from 'react-redux';
-import { getFilter } from 'redux/contactsSlice';
-import {
-  useGetContactsQuery,
-  useDeleteContactMutation,
-} from 'redux/contactsAPI';
+import { getContacts, getFilter } from 'redux/selectors';
+import {deleteContact, fetchContacts} from 'redux/contactsAPI';
 
 const ContactsList = () => {
-  const { data = [] } = useGetContactsQuery();
-  const { filter } = useSelector(state => getFilter(state));
-  const [deleteContact] = useDeleteContactMutation();
+  const dispatch = useDispatch();
 
-  const handleDeleteContact = id => deleteContact(id);
-
-  const filterList = () => {
-    const normalValue = filter.toLowerCase().trim();
-    return data.filter(contact =>
-      contact.name.toLowerCase().includes(normalValue)
-    );
+  const onDelete = (id) => {
+    dispatch(deleteContact(id));
   };
 
-  const contactsList = filterList();
+  const filter = useSelector(getFilter);
+  
 
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const { contacts } = useSelector(getContacts);
+
+  const filterContacts = () => {
+    if (filter !== '') {
+      return contacts.filter(contact =>
+        contact.name.toLowerCase().includes(filter.toLowerCase())
+      );
+    }
+    return contacts;
+  };
+
+  const filteredContacts = filterContacts();
   return (
     <ul className={style.contacts__list}>
-      {contactsList.length > 0 ? (
-        filterList().map(({ id, name, phone}) => {
+      {filteredContacts && filteredContacts.length > 0 ? (
+        filterContacts().map(({ id, name, phone}) => {
           return (
             <ContactItem
             key={id}
             id={id}
             name={name}
             number={phone}
-            onClick={handleDeleteContact}
+            onClick={onDelete}
           />
         );
         })

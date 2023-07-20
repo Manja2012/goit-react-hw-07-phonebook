@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import style from 'components/Filter/filter.module.css';
 import { useDispatch } from 'react-redux';
 import { changeFilter } from 'redux/contactsSlice.js';
+import { setFilter } from '../../redux/filterSlice';
 
 const Filter = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(setFilter);
 
-  const handleFilterChange = e => dispatch(changeFilter(e.target.value));
+
+  const handleFilterChange = e => dispatch(setFilter(e.currentTarget.value));
   return (
   <div>
     <label className={style.label_filter} htmlFor=""> Filtr by Name</label>
