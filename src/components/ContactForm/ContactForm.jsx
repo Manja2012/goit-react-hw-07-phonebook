@@ -10,7 +10,7 @@ import style from 'components/ContactForm/contactForm.module.css'
 export default function ContactForm(){
 
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
  
   const { contacts } = useSelector(getContacts);
   const dispatch = useDispatch();
@@ -19,14 +19,14 @@ export default function ContactForm(){
     setName(e.currentTarget.value);
   }
     const handleNumberChange = e => {
-      setNumber(e.currentTarget.value);
+      setPhone(e.currentTarget.value);
     };
 
  const handleSubmit = e => {
     e.preventDefault();
     const newContact = {
       name,
-      number,
+      phone,
       id: shortid.generate(),
     };
   contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase())
@@ -36,7 +36,7 @@ export default function ContactForm(){
 };
 const reset = () => {
   setName('');
-  setNumber('');
+  setPhone('');
 };
   
     return (
@@ -58,7 +58,7 @@ const reset = () => {
               className={style.input}
               type="tel"
               name="number"
-              value={number}
+              value={phone}
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               required
