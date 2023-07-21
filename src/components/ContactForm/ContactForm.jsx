@@ -31,7 +31,7 @@ export default function ContactForm(){
     };
   contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase())
   ? alert(`${name} is already in contacts`)
-  : dispatch(addContact({ name, number }));
+  : dispatch(addContact(newContact));
   reset();
 };
 const reset = () => {
